@@ -71,6 +71,12 @@ gw_P = [
 
 gw_R = [-.04, -.04, -.04, -.04, -.04, -1, -.04, -.04, -.04, -.04, 1]
 
+def new_forest(num_states, fire_prob):
+    forest_model = ex.forest(S = num_states, p = fire_prob)
+    forest_P = forest_model[0]
+    forest_R = forest_model[1]
+    return forest_P, forest_R
+
 
 def main():
     pass
