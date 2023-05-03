@@ -78,6 +78,18 @@ def new_forest(num_states, fire_prob):
     return forest_P, forest_R
 
 
+def value_iter_gw():
+    pass
+
+def value_iter_forest():
+    pass
+
+def policy_iter_gw():
+    pass
+
+def value_iter_forest():
+    pass
+
 def main():
     pass
 
