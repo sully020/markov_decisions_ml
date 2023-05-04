@@ -2,29 +2,20 @@
 Markov Decision Processes - main.py
 Christopher D. Sullivan
 Professor Brian O'Neill
-Due 5/4/23
+Due 5/5/23
 
 Imports:
 https://pymdptoolbox.readthedocs.io/en/latest/ - mdptoolbox
-
+https://numpy.org/ - numpy
 """
 
-
-import mdptoolbox.mdp as mdp, mdptoolbox.util as util, mdptoolbox.example as ex
-import grid_world as gw
+import mdptoolbox.mdp as mdp, mdptoolbox.example as ex
 import numpy as np
+import grid_world as gw
 
 gw_stochasticP = np.array(gw.stochastic_P)
 gw_deterministicP = np.array(gw.deterministic_P)
 gw_R = np.array(gw.R)
-
-
-
-def new_forest(num_states, fire_prob):
-    forest_model = ex.forest(S = num_states, p = fire_prob)
-    forest_P = forest_model[0]
-    forest_R = forest_model[1]
-    return forest_P, forest_R
 
 
 def translate_gw_policy(policy):
@@ -83,16 +74,26 @@ def policy_iter_gw():
     print("The policy returned by Policy Iteration was: " + translate_gw_policy(gw_pi.policy))
     print("The number of iterations in which Policy Iteration converged was: " + str(gw_pi.iter) + "\n")
 
+
 def forest_input():
-    num_states = input("How many years until the forest reaches its' peak? (Number of states): ")
+    num_states = input("How many years until the forest reaches its' peak? (# of states): ")
     fire_prob = input("Enter the decimal probability of fire p: ")
     return num_states, fire_prob
 
-def value_iter_forest():
-    states, prob = new_forest()
+def new_forest(num_states, fire_prob):
+    forest_model = ex.forest(S = num_states, p = fire_prob)
+    forest_P = forest_model[0]
+    forest_R = forest_model[1]
+    return forest_P, forest_R
 
 def value_iter_forest():
-    pass
+    num_states, fire_prob = forest_input()
+    states, prob = new_forest(num_states, fire_prob)
+
+def value_iter_forest():
+    num_states, fire_prob = forest_input()
+    states, prob = new_forest(num_states, fire_prob)
+
 
 def main():
     print()
