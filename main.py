@@ -26,6 +26,20 @@ def new_forest(num_states, fire_prob):
     return forest_P, forest_R
 
 
+def translate_gw_policy(policy):
+    engl_pol = range(11)
+    for i in policy:
+        match i:
+            case 0:
+                engl_pol[i] = 'Up'
+            case 1:
+                engl_pol[i] = 'Left'
+            case 2:
+                engl_pol[i] = 'Down'
+            case 3:
+                engl_pol[i] = 'Right'
+    return engl_pol
+
 def value_iter_gw():
     is_chosen = False
     while (is_chosen == False):
