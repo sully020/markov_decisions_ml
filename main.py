@@ -14,10 +14,11 @@ import mdptoolbox.mdp as mdp, mdptoolbox.util as util, mdptoolbox.example as ex
 import grid_world as gw
 import numpy as np
 
-gw_chanceP = np.array(gw.chance_P)
-gw_chanceR = np.array(gw.chance_R)
+gw_stochasticP = np.array(gw.stochastic_P)
 gw_deterministicP = np.array(gw.deterministic_P)
-gw_deterministicR = np.array(gw.deterministic_R)
+gw_R = np.array(gw.R)
+
+
 
 def new_forest(num_states, fire_prob):
     forest_model = ex.forest(S = num_states, p = fire_prob)
@@ -27,9 +28,9 @@ def new_forest(num_states, fire_prob):
 
 
 def translate_gw_policy(policy):
-    engl_pol = range(11)
-    for i in policy:
-        match i:
+    engl_pol = list(range(11))
+    for i in range(len(policy)):
+        match policy[i]:
             case 0:
                 engl_pol[i] = 'Up'
             case 1:
@@ -38,43 +39,54 @@ def translate_gw_policy(policy):
                 engl_pol[i] = 'Down'
             case 3:
                 engl_pol[i] = 'Right'
-    return engl_pol
+    return str(engl_pol)
 
 def value_iter_gw():
+    print("Grid World: Value Iteration - ")
     is_chosen = False
     while (is_chosen == False):
         choice = input("Would you like the agent's actions to be deterministic (D) or non-deterministic (N)? ")
-        if choice == 'D' or 'd':
-            gw_vi = mdp.ValueIteration(gw_chanceP, gw_chanceR, .2)
+        if choice == 'D' or choice == 'd':
+            discount = input("Please enter the decimal discount factor for future rewards: ")
+            gw_vi = mdp.ValueIteration(gw_deterministicP, gw_R, discount)
             is_chosen = True  
-        elif choice == 'N' or 'n':
-            gw_vi = mdp.ValueIteration(gw_deterministicP, gw_deterministicR, .2)
+        elif choice == 'N' or choice == 'n':
+            discount = input("Please enter the decimal discount factor for future rewards: ")
+            gw_vi = mdp.ValueIteration(gw_stochasticP, gw_R, discount)
             is_chosen = True
         else:
-            print('Input not recognized. Please select the letter D or the letter N.')
+            print('Input not recognized. Please select the letter D or the letter N.\n')
+            continue
 
     gw_vi.run()
-    print(gw_vi.policy)
+    print("The policy returned by Value Iteration was: " + translate_gw_policy(gw_vi.policy))
+    print("The number of iterations in which Value Iteration converged was: " + str(gw_vi.iter) + "\n")
 
 def policy_iter_gw():
+    print("Grid World: Policy Iteration - ")
     is_chosen = False
     while (is_chosen == False):
         choice = input("Would you like the agent's actions to be deterministic (D) or non-deterministic (N)? ")
-        if choice == 'D' or 'd':
-            gw_vi = mdp.PolicyIteration(gw_chanceP, gw_chanceR, .2)
+        if choice == 'D' or choice == 'd':
+            discount = input("Please enter the decimal discount factor for future rewards: ")
+            gw_pi = mdp.PolicyIteration(gw_deterministicP, gw_R, discount)
             is_chosen = True  
-        elif choice == 'N' or 'n':
-            gw_vi = mdp.PolicyIteration(gw_deterministicP, gw_deterministicR, .2)
+        elif choice == 'N' or choice == 'n':
+            discount = input("Please enter the decimal discount factor for future rewards: ")
+            gw_pi = mdp.PolicyIteration(gw_stochasticP, gw_R, discount)
             is_chosen = True
         else:
-            print('Input not recognized. Please select the letter D or the letter N.')
+            print('Input not recognized. Please select the letter D or the letter N.\n')
+            continue
             
-    gw_vi.run()
-    print(gw_vi.policy)
+    gw_pi.run()
+    print("The policy returned by Policy Iteration was: " + translate_gw_policy(gw_pi.policy))
+    print("The number of iterations in which Policy Iteration converged was: " + str(gw_pi.iter) + "\n")
 
 def forest_input():
     num_states = input("How many years until the forest reaches its' peak? (Number of states): ")
-    fire_prob = input("Enter an integer for probability of fire p: .")
+    fire_prob = input("Enter the decimal probability of fire p: ")
+    return num_states, fire_prob
 
 def value_iter_forest():
     states, prob = new_forest()
@@ -83,6 +95,7 @@ def value_iter_forest():
     pass
 
 def main():
+    print()
     value_iter_gw()
     policy_iter_gw()
 
