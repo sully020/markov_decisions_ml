@@ -147,5 +147,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# Professor O'Neill, you are the G.O.A.T. Best of luck in your coming endeavors!
